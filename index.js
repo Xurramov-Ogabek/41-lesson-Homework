@@ -1,22 +1,19 @@
 
 
 const express = require('express');
-const bodyParser = require('body-parser'); // Body parser kutubxonasini ulaymiz
+const bodyParser = require('body-parser'); 
 const fs = require('fs');
 
-const app = express(); // `app` obyektini yaratamiz
+const app = express(); 
 
-// Middleware
 app.use(bodyParser.json());
 
-// Fayl o'qish va yozish funksiyalari
 const readData = (file) => JSON.parse(fs.readFileSync(file, 'utf-8'));
 const writeData = (file, data) => fs.writeFileSync(file, JSON.stringify(data, null, 2));
 
 const USERS_FILE = './database/users.json';
 const BLOGS_FILE = './database/blog.json';
 
-// Ro'yxatdan o'tkazish
 app.post('/register', (req, res) => {
     const { username, password, fullName, age, email, gender } = req.body;
 
@@ -45,7 +42,6 @@ app.post('/register', (req, res) => {
     res.status(201).send(newUser);
 });
 
-// Profilni olish
 app.get('/profile/:identifier', (req, res) => {
     const identifier = req.params.identifier;
     const users = readData(USERS_FILE);
@@ -56,5 +52,4 @@ app.get('/profile/:identifier', (req, res) => {
     res.status(200).send(user);
 });
 
-// Serverni boshlash
 app.listen(3000, () => console.log('Server ishlayapti: http://localhost:3000'));
